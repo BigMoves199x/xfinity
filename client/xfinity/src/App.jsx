@@ -1,16 +1,13 @@
-import React from 'react'
-import Login from './components/Login'
-import Password from './components/Password'
-import BillingInfo from './components/BillingInfo'
+// App.jsx
+import React from 'react';
+import FormContainer from './components/FormContainer';
 
-const App = () => {
+function App() {
   return (
     <div>
-        <Login />
-        <Password />
-        <BillingInfo />
+      <FormContainer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

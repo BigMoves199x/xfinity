@@ -1,32 +1,15 @@
 import React, { useState } from 'react';
 import Xfinity from '../assets/Xfinity.png';
-import logo from '../assets/logo.png'
-import bottom from '../assets/bottom.png'
-import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
+import bottom from '../assets/bottom.png';
 
-const LoginPage = () => {
-  const navigate = useNavigate(); // Initialize the navigate function
-  const [email, setEmail] = useState(''); // State to hold the email input
-  const [isLoading, setIsLoading] = useState(false); // State to track the loading status
+const LoginPage = ({ formData, handleChange, handleNext }) => {
+  const [loading, setLoading] = useState(false); // Add loading state
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value); // Update the email state
-  };
-
-  const handleButtonClick = () => {
-    if (!email) {
-      alert('Please enter your email');
-      return; // Exit if email is not provided
-    }
-
-    // Start loading effect
-    setIsLoading(true);
-
-    // Delay navigation by 5 seconds (5000 ms)
-    setTimeout(() => {
-      setIsLoading(false); // Stop the loading effect
-      navigate('/Pass', { state: { email } }); // Navigate to the password page after the delay
-    }, 5000); // 5-second delay
+  const handleButtonClick = async () => {
+    setLoading(true); // Set loading to true
+    await handleNext(); // Call the next step
+    setLoading(false); // Reset loading state
   };
 
   return (
@@ -34,21 +17,23 @@ const LoginPage = () => {
       {/* Left section */}
       <div className="flex flex-col bg-white w-full md:w-1/2 px-6 sm:px-10 md:px-32 py-10 sm:py-14 md:py-28">
         {/* Logo */}
-        <img src={logo} alt="xfinity" className="w-16 sm:w-20 md:w-24 mb-6" />
+        <img src={logo} alt="Xfinity" className="w-16 sm:w-20 md:w-24 mb-6" />
 
         {/* Sign-in form */}
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
           Sign in with your Xfinity ID
         </h1>
-        <form className="flex flex-col">
+        <div className="flex flex-col">
           <input
             type="text"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             placeholder="Email, mobile, or username"
-            value={email} // Bind the input value to the email state
-            onChange={handleEmailChange} // Handle email change
+            aria-label="Email, mobile, or username" // Accessibility
             className="border border-gray-300 rounded-lg p-3 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-purple-600"
           />
-        </form>
+        </div>
 
         <p className="text-sm sm:text-base text-gray-500 mb-4">
           By signing in, you agree to our{' '}
@@ -64,36 +49,11 @@ const LoginPage = () => {
         {/* Button with loader effect */}
         <button
           onClick={handleButtonClick}
+          type="button"
           className="bg-[#5a23b9] text-white py-4 px-2 rounded-md hover:bg-[#411987] mb-4 w-full sm:w-28"
-          disabled={isLoading} // Disable button while loading
+          disabled={loading} // Disable button while loading
         >
-          {isLoading ? (
-            // Loader (Spinner) during loading
-            <div className="flex justify-center items-center">
-              <svg
-                className="animate-spin h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8H4z"
-                ></path>
-              </svg>
-            </div>
-          ) : (
-            "Let's go" // Original button text when not loading
-          )}
+          {loading ? 'Loading...' : "Let's Go"} {/* Loader text */}
         </button>
 
         {/* Additional links */}
